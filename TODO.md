@@ -1,11 +1,11 @@
 # LB & CO — Tareas pendientes
 
 ## Imágenes (requeridas para que la web se vea completa)
-- [ ] Añadir `hero-advisory.jpg` (foto de dos asesores revisando gráficos, 960×1080 px) en `public/assets/images/`
-- [ ] Añadir `blog-real-estate.jpg` (skyline de ciudad) en `public/assets/images/`
-- [ ] Añadir `blog-valuation.jpg` (gráficos financieros sobre escritorio) en `public/assets/images/`
-- [ ] Añadir `agent-lexi.jpg` (avatar del chatbot) en `public/assets/images/`
-- [ ] Optimizar todas las imágenes a WebP (usar Squoosh o similar)
+- [x] Añadir `hero-advisory.webp` (foto de dos asesores revisando gráficos, 960×1080 px) en `public/assets/images/`
+- [x] Añadir `blog-real-estate.webp` (skyline de ciudad) en `public/assets/images/`
+- [x] Añadir `blog-valuation.webp` (gráficos financieros sobre escritorio) en `public/assets/images/`
+- [x] Añadir `agent-lexi.webp` (avatar del chatbot) en `public/assets/images/`
+- [x] Optimizar todas las imágenes a WebP (usar Squoosh o similar)
 
 ## Formulario de contacto
 - [ ] Conectar el formulario en `contact.astro` a un backend real (Netlify Forms, Formspree, o endpoint propio)
