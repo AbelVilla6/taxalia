@@ -1,0 +1,35 @@
+---
+// Static AI chat widget — visible on load, closeable
+---
+
+<div id="chat-widget" class="chat-widget" role="complementary" aria-label="AI Assistant">
+  <div class="chat-widget-header">
+    <div class="chat-agent">
+      <!-- Replace with real avatar image -->
+      <img
+        class="chat-agent-avatar"
+        src="/assets/images/agent-lexi.jpg"
+        alt="Lexi, AI Assistant"
+        width="40"
+        height="40"
+        loading="lazy"
+        onerror="this.style.display='none'"
+      />
+      <div>
+        <p class="chat-agent-name">Lexi</p>
+        <p class="chat-agent-status">
+          <span class="status-dot" aria-hidden="true"></span>
+          AI Assistant
+        </p>
+      </div>
+    </div>
+    <button id="chat-close" class="chat-close" aria-label="Close chat widget">✕</button>
+  </div>
+
+  <div class="chat-widget-body">
+    <p class="chat-bubble">Hi! I'm Lexi, your AI Assistant. How can I help you today?</p>
+    <a href="/contact" class="btn" style="width:100%;justify-content:center;">
+      Ask a Question
+    </a>
+  </div>
+</div>

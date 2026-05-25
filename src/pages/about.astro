@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Base
+  title="About Us — LB & CO Global Advisors"
+  description="Learn about LB & CO Global Advisors, our mission, and our team."
+>
+  <Header activePage="About Us" />
+  <main id="main-content">
+    <section class="section">
+      <div class="container">
+        <p class="eyebrow">Who We Are</p>
+        <h1 class="section-title" style="text-transform:none;font-weight:500;">
+          About LB &amp; CO Global Advisors
+        </h1>
+        <p class="section-lead">
+          LB &amp; CO Global Advisors is an independent firm specializing in business advisory,
+          valuations, and financial guidance. We are committed to objectivity, integrity, and
+          data-driven insights that empower our clients to make confident decisions.
+        </p>
+        <!-- TODO: Add team bios, company history, values section -->
+      </div>
+    </section>
+  </main>
+  <Footer />
+</Base>

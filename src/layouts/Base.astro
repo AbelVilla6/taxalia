@@ -1,0 +1,74 @@
+---
+import '../assets/css/lb-co.css';
+
+export interface Props {
+  title?: string;
+  description?: string;
+  lang?: 'en' | 'es';
+}
+
+const {
+  title = 'LB & CO Global Advisors',
+  description = 'Independent, data-driven advisory and valuation services to help businesses, investors, and professionals make informed decisions across the United States.',
+  lang = 'en',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+
+    <!-- Base stylesheet (clinica-premium) -->
+    <link rel="stylesheet" href="/assets/css/clinica-premium.css" />
+    <!-- LB & CO overrides -->
+    <link rel="stylesheet" href="/assets/css/lb-co.css" />
+
+    <!-- Preconnect fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Favicon placeholder -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <slot />
+
+    <script>
+      // Sticky header scroll class
+      const header = document.querySelector('.site-header') as HTMLElement | null;
+      if (header) {
+        const onScroll = () => {
+          header.classList.toggle('is-scrolled', window.scrollY > 20);
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+      }
+
+      // Mobile menu toggle
+      const toggle = document.getElementById('menu-toggle');
+      const drawer = document.getElementById('mobile-drawer');
+      const drawerClose = document.getElementById('drawer-close');
+
+      toggle?.addEventListener('click', () => {
+        drawer?.classList.add('is-open');
+      });
+      drawerClose?.addEventListener('click', () => {
+        drawer?.classList.remove('is-open');
+      });
+
+      // Chat widget close
+      const chatClose = document.getElementById('chat-close');
+      const chatWidget = document.getElementById('chat-widget');
+      chatClose?.addEventListener('click', () => {
+        chatWidget?.remove();
+      });
+    </script>
+  </body>
+</html>

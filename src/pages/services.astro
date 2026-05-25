@@ -1,0 +1,24 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Services from '../components/Services.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Base
+  title="Services — LB & CO Global Advisors"
+  description="Advisory, valuation, and financial guidance services from LB & CO Global Advisors."
+>
+  <Header activePage="Services" />
+  <main id="main-content">
+    <section class="section-sm" style="background:var(--color-bg-soft);">
+      <div class="container">
+        <p class="eyebrow">What We Do</p>
+        <h1 class="section-title" style="text-transform:none;font-weight:500;">Our Services</h1>
+      </div>
+    </section>
+    <Services />
+    <!-- TODO: Add detailed service pages, case studies, pricing -->
+  </main>
+  <Footer />
+</Base>

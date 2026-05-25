@@ -1,0 +1,53 @@
+---
+const services = [
+  {
+    title: 'Advisory Services',
+    description:
+      'Strategic advice and business consulting services to support growth, transactions, and operational excellence.',
+    href: '/services/advisory',
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><circle cx="19" cy="7" r="2"/><path d="M19 13v6M22 16h-6"/></svg>`,
+  },
+  {
+    title: 'Valuation Support',
+    description:
+      'Independent valuations for businesses, real estate, and intangible assets delivered with rigor and integrity.',
+    href: '/services/valuation',
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M7 10h2v8H7zM11 6h2v12h-2zM15 14h2v4h-2z"/></svg>`,
+  },
+  {
+    title: 'Financial Guidance',
+    description:
+      'Financial analysis, reporting, and planning to help you make smarter, data-driven decisions.',
+    href: '/services/financial',
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>`,
+  },
+];
+---
+
+<section class="section services-section" aria-labelledby="services-heading">
+  <div class="container">
+    <!-- Header -->
+    <div class="text-center" style="margin-bottom:clamp(2rem,4vw,3.5rem);">
+      <p class="eyebrow" style="justify-content:center;gap:0.4rem;">
+        <span>Our Services</span>
+      </p>
+      <h2 id="services-heading" class="section-title" style="margin-inline:auto;text-align:center;text-transform:none;font-weight:500;">
+        Solutions That Drive Clarity and Confidence
+      </h2>
+    </div>
+
+    <!-- Cards grid -->
+    <div class="grid grid-3" style="--grid-gap:1.5rem;">
+      {services.map((svc) => (
+        <article class="service-card-lb">
+          <div class="service-icon-wrap" set:html={svc.icon} />
+          <h3 class="service-card-title">{svc.title}</h3>
+          <p class="service-card-text">{svc.description}</p>
+          <a href={svc.href} class="link-arrow" aria-label={`Learn more about ${svc.title}`}>
+            Learn More
+          </a>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>

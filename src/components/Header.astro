@@ -1,0 +1,109 @@
+---
+export interface Props {
+  activePage?: string;
+}
+const { activePage = '' } = Astro.props;
+
+const navLinks = [
+  { href: '/about', label: 'About Us' },
+  { href: '/contact', label: 'Contact Us' },
+  { href: '/services', label: 'Services' },
+  { href: '/blog', label: 'Blog' },
+];
+---
+
+<header class="site-header" role="banner">
+  <nav class="navbar" aria-label="Main navigation">
+    <!-- Logo -->
+    <a href="/" class="logo" aria-label="LB & CO Global Advisors Home">
+      <span class="logo-square" aria-hidden="true">LB</span>
+      <span class="logo-text-group">
+        <span class="logo-name">LB &amp; CO</span>
+        <span class="logo-tagline">Global Advisors</span>
+      </span>
+    </a>
+
+    <!-- Desktop nav -->
+    <ul class="nav-menu" role="list">
+      {navLinks.map(({ href, label }) => (
+        <li class="nav-item">
+          <a
+            href={href}
+            class={`nav-link${activePage === label ? ' is-active' : ''}`}
+          >
+            {label}
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <!-- Actions -->
+    <div class="nav-actions">
+      <!-- Language switcher -->
+      <div class="lang-switcher" role="group" aria-label="Language selector">
+        <button class="lang-btn active" aria-pressed="true">US</button>
+        <button class="lang-btn" aria-pressed="false">ES</button>
+      </div>
+
+      <a href="/contact" class="btn">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="15"
+          height="15"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="16" y1="2" x2="16" y2="6"></line>
+          <line x1="8" y1="2" x2="8" y2="6"></line>
+          <line x1="3" y1="10" x2="21" y2="10"></line>
+        </svg>
+        Book a Consultation
+      </a>
+
+      <!-- Mobile hamburger -->
+      <button
+        id="menu-toggle"
+        class="menu-toggle"
+        aria-label="Open menu"
+        aria-expanded="false"
+        aria-controls="mobile-drawer"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </nav>
+</header>
+
+<!-- Mobile drawer -->
+<div id="mobile-drawer" class="drawer" role="dialog" aria-modal="true" aria-label="Mobile navigation">
+  <div class="drawer-inner">
+    <div class="drawer-header">
+      <span class="drawer-title">Menu</span>
+      <button id="drawer-close" class="icon-btn" aria-label="Close menu">✕</button>
+    </div>
+    <nav aria-label="Mobile navigation">
+      <ul role="list" style="display:grid;gap:0.25rem;margin-top:1.5rem;">
+        {navLinks.map(({ href, label }) => (
+          <li>
+            <a href={href} class="nav-link" style="padding-block:0.9rem;font-size:0.85rem;">
+              {label}
+            </a>
+          </li>
+        ))}
+        <li style="margin-top:1rem;">
+          <a href="/contact" class="btn" style="width:100%;justify-content:center;">
+            Book a Consultation
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>

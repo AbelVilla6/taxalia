@@ -1,0 +1,25 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import Services from '../components/Services.astro';
+import Blog from '../components/Blog.astro';
+import CTA from '../components/CTA.astro';
+import Footer from '../components/Footer.astro';
+import ChatWidget from '../components/ChatWidget.astro';
+---
+
+<Base
+  title="LB & CO Global Advisors — Trusted Advisory. Insightful Valuations."
+  description="Independent, data-driven advisory and valuation services to help businesses, investors, and professionals make informed decisions across the United States."
+>
+  <Header activePage="About Us" />
+  <main id="main-content">
+    <Hero />
+    <Services />
+    <Blog />
+    <CTA />
+  </main>
+  <Footer />
+  <ChatWidget />
+</Base>
