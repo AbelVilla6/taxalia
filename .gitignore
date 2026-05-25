@@ -1,0 +1,134 @@
+# ============================================================================
+# Sistema operativo
+# ============================================================================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.Spotlight-V100
+.Trashes
+.fseventsd
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+
+# ============================================================================
+# Editores e IDEs
+# ============================================================================
+
+# VS Code
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.example.json
+
+# JetBrains
+.idea/
+
+# Otros
+*.swp
+*.swo
+*~
+.project
+.classpath
+.c9/
+.history/
+
+
+# ============================================================================
+# Node / Astro
+# ============================================================================
+
+# Dependencias
+node_modules/
+
+# Salida de build
+dist/
+.output/
+.vercel/
+.netlify/
+
+# Astro genera tipos y caché aquí
+.astro/
+
+# Cachés
+.cache/
+.parcel-cache/
+.turbo/
+.vite/
+vite.config.*.timestamp-*
+vite.config.*.mjs.timestamp-*
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Lock temporal de package managers
+.pnpm-store/
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+
+
+# ============================================================================
+# Variables de entorno
+# Astro puede cargar variables desde archivos .env del proyecto.
+# No deben subirse si contienen claves privadas.
+# ============================================================================
+
+.env
+.env.*
+!.env.example
+!.env.template
+
+
+# ============================================================================
+# Testing / coverage
+# ============================================================================
+
+coverage/
+.nyc_output/
+test-results/
+playwright-report/
+blob-report/
+
+
+# ============================================================================
+# TypeScript / build cache
+# ============================================================================
+
+*.tsbuildinfo
+
+
+# ============================================================================
+# Archivos locales del proyecto
+# ============================================================================
+
+*.local
+*.log
+*.tmp
+*.temp
+
+# Backups
+*.bak
+*.backup
+*.old
