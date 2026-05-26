@@ -1,15 +1,21 @@
 ---
-// Static AI chat widget — visible on load, closeable
+import { localizePath, ui, type Lang } from '../i18n';
+
+export interface Props {
+  lang?: Lang;
+}
+
+const { lang = 'en' } = Astro.props;
+const copy = ui[lang].chat;
 ---
 
-<div id="chat-widget" class="chat-widget" role="complementary" aria-label="AI Assistant">
+<div id="chat-widget" class="chat-widget" role="complementary" aria-label={copy.ariaLabel}>
   <div class="chat-widget-header">
     <div class="chat-agent">
-      <!-- Replace with real avatar image -->
       <img
         class="chat-agent-avatar"
         src="/assets/images/agent-lexi.webp"
-        alt="Lexi, AI Assistant"
+        alt={copy.imageAlt}
         width="40"
         height="40"
         loading="lazy"
@@ -19,17 +25,17 @@
         <p class="chat-agent-name">Lexi</p>
         <p class="chat-agent-status">
           <span class="status-dot" aria-hidden="true"></span>
-          AI Assistant
+          {copy.status}
         </p>
       </div>
     </div>
-    <button id="chat-close" class="chat-close" aria-label="Close chat widget">✕</button>
+    <button id="chat-close" class="chat-close" aria-label={copy.close}>&times;</button>
   </div>
 
   <div class="chat-widget-body">
-    <p class="chat-bubble">Hi! I'm Lexi, your AI Assistant. How can I help you today?</p>
-    <a href="/contact" class="btn" style="width:100%;justify-content:center;">
-      Ask a Question
+    <p class="chat-bubble">{copy.bubble}</p>
+    <a href={localizePath(lang, '/contact')} class="btn" style="width:100%;justify-content:center;">
+      {copy.action}
     </a>
   </div>
 </div>

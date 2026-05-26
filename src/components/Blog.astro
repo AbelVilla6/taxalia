@@ -1,41 +1,29 @@
 ---
-const posts = [
-  {
-    date: 'May 10, 2024',
-    title: '2024 U.S. Real Estate Market Outlook: Key Trends and Opportunities',
-    excerpt:
-      'We break down the factors shaping the U.S. real estate market and what investors and business owners should watch.',
-    href: '/blog/2024-us-real-estate-market-outlook',
-    image: '/assets/images/blog-real-estate.webp',
-    imageAlt: 'Aerial view of a major US city skyline at dusk',
-  },
-  {
-    date: 'April 23, 2024',
-    title: 'Business Valuation 101: What You Need to Know',
-    excerpt:
-      'A practical guide to understanding business valuation methods and how they support better decision-making.',
-    href: '/blog/business-valuation-101',
-    image: '/assets/images/blog-valuation.webp',
-    imageAlt: 'Financial charts and pen on a desk',
-  },
-];
+import { localizePath, ui, type Lang } from '../i18n';
+
+export interface Props {
+  lang?: Lang;
+}
+
+const { lang = 'en' } = Astro.props;
+const copy = ui[lang].blog;
 ---
 
 <section class="section blog-lb" aria-labelledby="blog-heading">
   <div class="container">
     <!-- Header -->
     <div style="margin-bottom:0;">
-      <p class="eyebrow">From Our Blog</p>
+      <p class="eyebrow">{copy.eyebrow}</p>
       <h2 id="blog-heading" class="section-title" style="text-transform:none;font-weight:500;">
-        Insights That Matter
+        {copy.title}
       </h2>
     </div>
 
     <!-- Posts -->
     <div class="blog-grid-lb">
-      {posts.map((post) => (
+      {copy.posts.map((post) => (
         <article class="post-card-lb">
-          <a href={post.href} tabindex="-1" aria-hidden="true">
+          <a href={localizePath(lang, post.href)} tabindex="-1" aria-hidden="true">
             <img
               class="post-image"
               src={post.image}
@@ -48,10 +36,10 @@ const posts = [
           <div>
             <p class="post-date">{post.date}</p>
             <h3 class="post-title">
-              <a href={post.href}>{post.title}</a>
+              <a href={localizePath(lang, post.href)}>{post.title}</a>
             </h3>
             <p class="post-excerpt">{post.excerpt}</p>
-            <a href={post.href} class="link-arrow">Read More</a>
+            <a href={localizePath(lang, post.href)} class="link-arrow">{copy.readMore}</a>
           </div>
         </article>
       ))}

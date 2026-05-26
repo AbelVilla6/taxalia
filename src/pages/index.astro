@@ -7,19 +7,24 @@ import Blog from '../components/Blog.astro';
 import CTA from '../components/CTA.astro';
 import Footer from '../components/Footer.astro';
 import ChatWidget from '../components/ChatWidget.astro';
+import { ui } from '../i18n';
+
+const lang = 'en';
+const copy = ui[lang];
 ---
 
 <Base
-  title="LB & CO Global Advisors — Trusted Advisory. Insightful Valuations."
-  description="Independent, data-driven advisory and valuation services to help businesses, investors, and professionals make informed decisions across the United States."
+  title={copy.meta.home.title}
+  description={copy.meta.home.description}
+  lang={lang}
 >
-  <Header activePage="About Us" />
+  <Header lang={lang} />
   <main id="main-content">
-    <Hero />
-    <Services />
-    <Blog />
-    <CTA />
+    <Hero lang={lang} />
+    <Services lang={lang} />
+    <Blog lang={lang} />
+    <CTA lang={lang} />
   </main>
-  <Footer />
-  <ChatWidget />
+  <Footer lang={lang} />
+  <ChatWidget lang={lang} />
 </Base>

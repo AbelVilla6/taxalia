@@ -1,29 +1,37 @@
 ---
+import { ui, type Lang } from '../i18n';
+
+export interface Props {
+  lang?: Lang;
+}
+
+const { lang = 'en' } = Astro.props;
 const year = new Date().getFullYear();
+const copy = ui[lang].footer;
 ---
 
 <footer class="site-footer-lb" role="contentinfo">
   <div class="container">
     <div class="footer-bottom-lb">
-      <p>© {year} LB &amp; CO – GLOBAL ADVISORS. All rights reserved.</p>
+      <p>&copy; {year} LB &amp; CO - GLOBAL ADVISORS. {copy.rights}</p>
 
       <div class="footer-badges">
         <span class="footer-badge">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-          Independent
+          {copy.independent}
         </span>
-        <span style="color:rgba(255,255,255,0.2)">•</span>
+        <span style="color:rgba(255,255,255,0.2)">&middot;</span>
         <span class="footer-badge">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
             <rect x="3" y="11" width="18" height="11" rx="2" ry="2" stroke-linecap="round" stroke-linejoin="round"/>
             <path d="M7 11V7a5 5 0 0 1 10 0v4" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-          Confidential
+          {copy.confidential}
         </span>
-        <span style="color:rgba(255,255,255,0.2)">•</span>
-        <span class="footer-badge">Committed to Excellence</span>
+        <span style="color:rgba(255,255,255,0.2)">&middot;</span>
+        <span class="footer-badge">{copy.excellence}</span>
       </div>
 
       <div class="footer-multilingual">
@@ -43,7 +51,7 @@ const year = new Date().getFullYear();
           <line x1="2" y1="12" x2="22" y2="12"/>
           <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
         </svg>
-        Multilingual Ready
+        {copy.multilingual}
       </div>
     </div>
   </div>

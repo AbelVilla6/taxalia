@@ -1,21 +1,42 @@
 ---
-export interface Props {
-  activePage?: string;
-}
-const { activePage = '' } = Astro.props;
+import {
+  basePathFromPathname,
+  languages,
+  localizePath,
+  ui,
+  type Lang,
+  type NavKey,
+} from '../i18n';
 
+export interface Props {
+  activePage?: NavKey;
+  lang?: Lang;
+}
+
+const { activePage, lang = 'en' } = Astro.props;
+const copy = ui[lang].header;
 const navLinks = [
-  { href: '/about', label: 'About Us' },
-  { href: '/contact', label: 'Contact Us' },
-  { href: '/services', label: 'Services' },
-  { href: '/blog', label: 'Blog' },
+  { key: 'about' as const, href: '/about' },
+  { key: 'contact' as const, href: '/contact' },
+  { key: 'services' as const, href: '/services' },
+  { key: 'blog' as const, href: '/blog' },
+].map((link) => ({
+  ...link,
+  href: localizePath(lang, link.href),
+  label: copy.nav[link.key],
+}));
+
+const basePath = basePathFromPathname(Astro.url.pathname);
+const languageLinks = [
+  { lang: 'en' as const, href: localizePath('en', basePath) },
+  { lang: 'es' as const, href: localizePath('es', basePath) },
 ];
 ---
 
 <header class="site-header" role="banner">
-  <nav class="navbar" aria-label="Main navigation">
+  <nav class="navbar" aria-label={copy.navLabel}>
     <!-- Logo -->
-    <a href="/" class="logo" aria-label="LB & CO Global Advisors Home">
+    <a href={localizePath(lang, '/')} class="logo" aria-label={copy.homeLabel}>
       <span class="logo-square" aria-hidden="true">LB</span>
       <span class="logo-text-group">
         <span class="logo-name">LB &amp; CO</span>
@@ -25,11 +46,11 @@ const navLinks = [
 
     <!-- Desktop nav -->
     <ul class="nav-menu" role="list">
-      {navLinks.map(({ href, label }) => (
+      {navLinks.map(({ key, href, label }) => (
         <li class="nav-item">
           <a
             href={href}
-            class={`nav-link${activePage === label ? ' is-active' : ''}`}
+            class={`nav-link${activePage === key ? ' is-active' : ''}`}
           >
             {label}
           </a>
@@ -40,12 +61,22 @@ const navLinks = [
     <!-- Actions -->
     <div class="nav-actions">
       <!-- Language switcher -->
-      <div class="lang-switcher" role="group" aria-label="Language selector">
-        <button class="lang-btn active" aria-pressed="true">US</button>
-        <button class="lang-btn" aria-pressed="false">ES</button>
+      <div class="lang-switcher" role="group" aria-label={copy.languageSelector}>
+        {languageLinks.map((languageLink) => (
+          <a
+            class={`lang-btn${lang === languageLink.lang ? ' active' : ''}`}
+            href={languageLink.href}
+            hreflang={languages[languageLink.lang].htmlLang}
+            lang={languages[languageLink.lang].htmlLang}
+            aria-label={copy.switchTo[languageLink.lang]}
+            aria-current={lang === languageLink.lang ? 'true' : undefined}
+          >
+            {languages[languageLink.lang].label}
+          </a>
+        ))}
       </div>
 
-      <a href="/contact" class="btn">
+      <a href={localizePath(lang, '/contact')} class="btn">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="15"
@@ -63,14 +94,14 @@ const navLinks = [
           <line x1="8" y1="2" x2="8" y2="6"></line>
           <line x1="3" y1="10" x2="21" y2="10"></line>
         </svg>
-        Book a Consultation
+        {copy.book}
       </a>
 
       <!-- Mobile hamburger -->
       <button
         id="menu-toggle"
         class="menu-toggle"
-        aria-label="Open menu"
+        aria-label={copy.openMenu}
         aria-expanded="false"
         aria-controls="mobile-drawer"
       >
@@ -83,13 +114,13 @@ const navLinks = [
 </header>
 
 <!-- Mobile drawer -->
-<div id="mobile-drawer" class="drawer" role="dialog" aria-modal="true" aria-label="Mobile navigation">
+<div id="mobile-drawer" class="drawer" role="dialog" aria-modal="true" aria-label={copy.mobileNavLabel}>
   <div class="drawer-inner">
     <div class="drawer-header">
-      <span class="drawer-title">Menu</span>
-      <button id="drawer-close" class="icon-btn" aria-label="Close menu">✕</button>
+      <span class="drawer-title">{copy.menu}</span>
+      <button id="drawer-close" class="icon-btn" aria-label={copy.closeMenu}>&times;</button>
     </div>
-    <nav aria-label="Mobile navigation">
+    <nav aria-label={copy.mobileNavLabel}>
       <ul role="list" style="display:grid;gap:0.25rem;margin-top:1.5rem;">
         {navLinks.map(({ href, label }) => (
           <li>
@@ -99,8 +130,8 @@ const navLinks = [
           </li>
         ))}
         <li style="margin-top:1rem;">
-          <a href="/contact" class="btn" style="width:100%;justify-content:center;">
-            Book a Consultation
+          <a href={localizePath(lang, '/contact')} class="btn" style="width:100%;justify-content:center;">
+            {copy.book}
           </a>
         </li>
       </ul>

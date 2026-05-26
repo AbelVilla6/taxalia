@@ -1,26 +1,31 @@
 ---
-// Hero — split layout matching the screenshot
+import { localizePath, ui, type Lang } from '../i18n';
+
+export interface Props {
+  lang?: Lang;
+}
+
+const { lang = 'en' } = Astro.props;
+const copy = ui[lang].hero;
 ---
 
-<section class="hero-split" aria-label="Hero">
+<section class="hero-split" aria-label={copy.ariaLabel}>
   <!-- Left: content -->
   <div class="hero-split-content fade-up">
-    <p class="hero-kicker" style="color:var(--color-primary);">About Us</p>
+    <p class="hero-kicker" style="color:var(--color-primary);">{copy.kicker}</p>
 
     <h1 class="hero-split hero-title">
-      Trusted Advisory.<br />
-      Insightful Valuations.<br />
-      Confident Decisions.
+      {copy.title[0]}<br />
+      {copy.title[1]}<br />
+      {copy.title[2]}
     </h1>
 
     <p class="hero-text" style="margin-top:1.1rem;">
-      We deliver independent, data-driven advisory and valuation services to help
-      businesses, investors, and professionals make informed decisions across the
-      United States.
+      {copy.text}
     </p>
 
     <div class="hero-actions">
-      <a href="/contact" class="btn">
+      <a href={localizePath(lang, '/contact')} class="btn">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="15"
@@ -38,9 +43,9 @@
           <line x1="8" y1="2" x2="8" y2="6"></line>
           <line x1="3" y1="10" x2="21" y2="10"></line>
         </svg>
-        Book a Consultation
+        {copy.book}
       </a>
-      <a href="/services" class="btn btn-outline">
+      <a href={localizePath(lang, '/services')} class="btn btn-outline">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="15"
@@ -56,7 +61,7 @@
           <rect x="9" y="9" width="13" height="13" rx="2"></rect>
           <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
         </svg>
-        Explore Our Services
+        {copy.explore}
       </a>
     </div>
 
@@ -78,7 +83,7 @@
           <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"></path>
           <circle cx="12" cy="10" r="3"></circle>
         </svg>
-        Serving clients across the United States
+        {copy.trustLocation}
       </span>
       <span style="color:var(--color-border)">|</span>
       <span class="hero-trust-item">
@@ -96,21 +101,16 @@
         >
           <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
         </svg>
-        Independent. Objective. Trusted.
+        {copy.trustValues}
       </span>
     </div>
   </div>
 
   <!-- Right: photo -->
   <div class="hero-split-media">
-    <!--
-      Replace src with your actual advisory/business photo.
-      Suggested: two professionals reviewing charts at a desk with US Capitol visible.
-      Dimensions: at least 960×1080 px.
-    -->
     <img
       src="/assets/images/hero-advisory.webp"
-      alt="Two advisors reviewing financial charts and data in a professional setting"
+      alt={copy.imageAlt}
       width="960"
       height="1080"
       loading="eager"

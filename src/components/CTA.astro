@@ -1,5 +1,12 @@
 ---
-// CTA section — "Let's Work Together"
+import { localizePath, ui, type Lang } from '../i18n';
+
+export interface Props {
+  lang?: Lang;
+}
+
+const { lang = 'en' } = Astro.props;
+const copy = ui[lang].cta;
 ---
 
 <section class="section-sm cta-section" aria-labelledby="cta-heading">
@@ -8,10 +15,10 @@
       <!-- Left: heading -->
       <div>
         <h2 id="cta-heading" class="section-title" style="text-transform:none;font-weight:500;font-size:clamp(1.8rem,3vw,3rem);">
-          Let's Work Together
+          {copy.title}
         </h2>
         <p class="section-lead" style="margin-top:0.5rem;font-size:var(--text-sm);">
-          Have questions or ready to get started? We're here to help.
+          {copy.lead}
         </p>
       </div>
 
@@ -43,8 +50,8 @@
 
       <!-- Right: CTA button + social -->
       <div style="display:flex;flex-direction:column;gap:1rem;align-items:flex-start;">
-        <a href="/contact" class="btn btn-outline">
-          Get in Touch&nbsp;&nbsp;→
+        <a href={localizePath(lang, '/contact')} class="btn btn-outline">
+          {copy.getInTouch} <span aria-hidden="true">&rarr;</span>
         </a>
 
         <a
@@ -70,7 +77,7 @@
             <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
             <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
           </svg>
-          Follow us&nbsp;
+          {copy.followUs}&nbsp;
           <strong>@hitaxalia</strong>
         </a>
       </div>
