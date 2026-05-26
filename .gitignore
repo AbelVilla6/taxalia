@@ -56,11 +56,6 @@ $RECYCLE.BIN/
 # Dependencias
 node_modules/
 
-# Salida de build
-dist/
-.output/
-.vercel/
-.netlify/
 
 # Astro genera tipos y caché aquí
 .astro/
