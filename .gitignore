@@ -1,10 +1,14 @@
-# build output
-dist/
-# generated types
-.astro/
+# build output (frontend)
+frontend/dist/
+dist/                       # legacy tracked build noise; remove when clean
+# generated types (frontend)
+frontend/.astro/
+.astro/                     # legacy generated types at root
 
 # dependencies
-node_modules/
+frontend/node_modules/
+backend/node_modules/
+node_modules/               # legacy deps at root; will disappear on next clone
 
 # logs
 npm-debug.log*
@@ -16,6 +20,8 @@ pnpm-debug.log*
 # environment variables
 .env
 .env.production
+frontend/.env
+backend/.env
 
 # macOS-specific files
 .DS_Store
