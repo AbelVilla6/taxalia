@@ -2,6 +2,7 @@
   "name": "taxalia-root",
   "private": true,
   "scripts": {
-    "build": "npm --prefix frontend run build"
+    "build": "npm --prefix frontend run build",
+    "start": "npm --prefix backend run start"
   }
 }
