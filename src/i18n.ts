@@ -176,6 +176,14 @@ export const ui = {
       close: 'Close chat widget',
       bubble: "Hi! I'm Lexi, your AI Assistant. How can I help you today?",
       action: 'Ask a Question',
+      placeholder: 'Type your message...',
+      send: 'Send',
+      sendAria: 'Send message',
+      typing: 'Lexi is typing...',
+      error: 'Sorry, something went wrong. Please try again.',
+      personaName: 'Lexi',
+      humanHandoff: 'Talk to a person',
+      partialWarning: 'Some answers may be incomplete.',
     },
     pages: {
       about: {
@@ -332,6 +340,14 @@ export const ui = {
       close: 'Cerrar widget de chat',
       bubble: 'Hola, soy Lexi, tu asistente de IA. ¿Cómo puedo ayudarte hoy?',
       action: 'Hacer una pregunta',
+      placeholder: 'Escribe tu mensaje...',
+      send: 'Enviar',
+      sendAria: 'Enviar mensaje',
+      typing: 'Lexi está escribiendo...',
+      error: 'Lo siento, algo salió mal. Inténtalo de nuevo.',
+      personaName: 'Lexi',
+      humanHandoff: 'Hablar con una persona',
+      partialWarning: 'Algunas respuestas pueden estar incompletas.',
     },
     pages: {
       about: {

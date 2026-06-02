@@ -7,6 +7,7 @@ export interface Props {
 
 const { lang = 'en' } = Astro.props;
 const copy = ui[lang].chat;
+const apiBase = (import.meta.env.PUBLIC_CHAT_API_BASE ?? 'http://localhost:4324').replace(/\/+$/, '');
 ---
 
 <div id="chat-widget" class="chat-widget" role="complementary" aria-label={copy.ariaLabel}>
@@ -22,20 +23,48 @@ const copy = ui[lang].chat;
         onerror="this.style.display='none'"
       />
       <div>
-        <p class="chat-agent-name">Lexi</p>
+        <p class="chat-agent-name">{copy.personaName}</p>
         <p class="chat-agent-status">
           <span class="status-dot" aria-hidden="true"></span>
           {copy.status}
         </p>
       </div>
     </div>
-    <button id="chat-close" class="chat-close" aria-label={copy.close}>&times;</button>
+    <button id="chat-close" class="chat-close" aria-label={copy.close} type="button">&times;</button>
   </div>
 
   <div class="chat-widget-body">
-    <p class="chat-bubble">{copy.bubble}</p>
-    <a href={localizePath(lang, '/contact')} class="btn" style="width:100%;justify-content:center;">
-      {copy.action}
-    </a>
+    <div id="chat-messages" class="chat-messages" role="log" aria-live="polite" aria-relevant="additions">
+      <div class="chat-msg chat-msg--assistant">
+        <p class="chat-msg-bubble">{copy.bubble}</p>
+      </div>
+    </div>
+
+    <form id="chat-form" class="chat-input" autocomplete="off">
+      <label for="chat-text" class="visually-hidden">{copy.sendAria}</label>
+      <input
+        id="chat-text"
+        class="chat-input-field"
+        name="message"
+        type="text"
+        placeholder={copy.placeholder}
+        aria-label={copy.sendAria}
+        autocomplete="off"
+        maxlength="2000"
+        required
+      />
+      <button id="chat-send" class="chat-input-send" type="submit" aria-label={copy.sendAria} disabled>
+        {copy.send}
+      </button>
+    </form>
+
+    <div class="chat-footer">
+      <a class="chat-handoff" href={localizePath(lang, '/contact')}>{copy.humanHandoff}</a>
+    </div>
+
+    <p id="chat-typing" class="chat-typing" hidden>{copy.typing}</p>
+    <p id="chat-error" class="chat-error" role="alert" hidden></p>
   </div>
+
+  <script type="application/json" id="chat-config" is:inline set:html={JSON.stringify({ apiBase, lang })}></script>
 </div>
