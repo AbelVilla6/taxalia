@@ -15,34 +15,32 @@ context: |
   dynamic loaders for skills/agents/conduct, parallel agent dispatch.
   Persistence mode (B3): hybrid — OpenSpec files in repo + Engram copies.
   Chained PR strategy (C3): force-chained from the start. Review budget 400 LOC.
-  No test runner, linter, or formatter exists today. Vitest must be added in
-  the same change that creates the backend.
+  Backend test runner is available via Vitest in `backend/`. New backend slices
+  must keep tests with the behavior they introduce.
   Runtime: Node 25.2.0, package manager: npm (package-lock.json present).
 
-strict_tdd: false
+strict_tdd: true
 strict_tdd_rationale: |
-  No test runner is installed in taxalia today. strict_tdd will be flipped to
-  true inside the sdd-apply task that adds Vitest. Until then, downstream
-  phases that need a test command must run `npm test` against a runner that
-  does not yet exist.
+  PR2 added a backend-local Vitest runner. Backend apply/verify phases now have
+  an executable test command and must keep tests with each behavior slice.
 
 testing:
-  runner: none
+  runner: vitest
   runner_chosen: vitest
   runner_chosen_rationale: |
     Vitest is the natural default for a TS-first Node backend on the same
     machine, shares the Vite ecosystem Astro already uses, and has first-class
     ESM + TypeScript support without Babel/Jest config drift.
   layers:
-    unit:        { available: false, tool: "—" }
-    integration: { available: false, tool: "—" }
+    unit:        { available: true, tool: "vitest" }
+    integration: { available: true, tool: "vitest" }
     e2e:         { available: false, tool: "—" }
   coverage:
     available: false
     command: "—"
   quality:
     linter:        { available: false, command: "—" }
-    type_checker:  { available: true,  command: "npx astro check" }
+    type_checker:  { available: true,  command: "npm --prefix backend run typecheck; npm run build" }
     formatter:     { available: false, command: "—" }
 
 phases:
@@ -71,15 +69,15 @@ phases:
       Add an explicit "wire Vitest + npm test" task before any production code
       in the backend.
   apply:
-    tdd: false               # flipped to true once Vitest is added
-    test_command: ""         # wired after Vitest lands
+    tdd: true
+    test_command: "npm --prefix backend test"
     on_enter: |
       Do not modify src/ components beyond the strictly-required edit to
       src/components/ChatWidget.astro. Honor existing i18n.ts `Lang` type and
       `ui[lang].chat` shape on the frontend. Backend stays in its own folder
       (suggested: `backend/` or monorepo `apps/backend/` — defer to sdd-propose).
   verify:
-    test_command: ""         # wired after Vitest lands
+    test_command: "npm --prefix backend test"
     build_command: "npm run build"
     coverage_threshold: 0    # bumped after Vitest lands
   archive:
