@@ -1,0 +1,104 @@
+# openspec/config.yaml
+# taxalia — SDD project configuration
+# Maintained by sdd-init on 2026-06-02
+
+schema: spec-driven
+
+context: |
+  Project: taxalia (npm package name: "lb-co-global-advisors" — name drift, see
+  Engram "Project name drift" discovery). Marketing brand is "Taxalia".
+  Frontend: Astro 6.3.7 static site, strict TypeScript, no integrations, manual
+  i18n via /es/ subroutes + src/i18n.ts. Existing static chat widget (Lexi
+  persona) at src/components/ChatWidget.astro — must be replaced.
+  Backend (upcoming change): Screaming Architecture (Uncle Bob), packages by
+  domain (skills, agents, conducta/policies), Ollama model "gemma4:e4b",
+  dynamic loaders for skills/agents/conduct, parallel agent dispatch.
+  Persistence mode (B3): hybrid — OpenSpec files in repo + Engram copies.
+  Chained PR strategy (C3): force-chained from the start. Review budget 400 LOC.
+  No test runner, linter, or formatter exists today. Vitest must be added in
+  the same change that creates the backend.
+  Runtime: Node 25.2.0, package manager: npm (package-lock.json present).
+
+strict_tdd: false
+strict_tdd_rationale: |
+  No test runner is installed in taxalia today. strict_tdd will be flipped to
+  true inside the sdd-apply task that adds Vitest. Until then, downstream
+  phases that need a test command must run `npm test` against a runner that
+  does not yet exist.
+
+testing:
+  runner: none
+  runner_chosen: vitest
+  runner_chosen_rationale: |
+    Vitest is the natural default for a TS-first Node backend on the same
+    machine, shares the Vite ecosystem Astro already uses, and has first-class
+    ESM + TypeScript support without Babel/Jest config drift.
+  layers:
+    unit:        { available: false, tool: "—" }
+    integration: { available: false, tool: "—" }
+    e2e:         { available: false, tool: "—" }
+  coverage:
+    available: false
+    command: "—"
+  quality:
+    linter:        { available: false, command: "—" }
+    type_checker:  { available: true,  command: "npx astro check" }
+    formatter:     { available: false, command: "—" }
+
+phases:
+  proposal:
+    on_enter: |
+      Require explicit rollback plan when the proposal touches the static chat
+      widget (src/components/ChatWidget.astro) — it is the user-facing entry
+      point and a regression there is visible immediately.
+  specs:
+    on_enter: |
+      Use Given/When/Then for scenarios. Honor RFC 2119 keywords
+      (MUST, SHALL, SHOULD, MAY). When the spec introduces an agent persona,
+      reference the existing "Lexi" persona in src/components/ChatWidget.astro
+      rather than re-naming without intent.
+  design:
+    on_enter: |
+      Backend MUST follow Screaming Architecture: top-level packages are
+      domains (skills, agents, conducta, dispatch, ollama), not framework
+      folders (controllers/services/repositories). Include a package tree in
+      the design. Show how dynamic loaders resolve skills/agents/conduct from
+      the filesystem at startup.
+  tasks:
+    on_enter: |
+      Group by domain package. Each task completable in one session. Track
+      parallel-agent dispatch as its own task with a clear interface boundary.
+      Add an explicit "wire Vitest + npm test" task before any production code
+      in the backend.
+  apply:
+    tdd: false               # flipped to true once Vitest is added
+    test_command: ""         # wired after Vitest lands
+    on_enter: |
+      Do not modify src/ components beyond the strictly-required edit to
+      src/components/ChatWidget.astro. Honor existing i18n.ts `Lang` type and
+      `ui[lang].chat` shape on the frontend. Backend stays in its own folder
+      (suggested: `backend/` or monorepo `apps/backend/` — defer to sdd-propose).
+  verify:
+    test_command: ""         # wired after Vitest lands
+    build_command: "npm run build"
+    coverage_threshold: 0    # bumped after Vitest lands
+  archive:
+    on_enter: |
+      Archive both the OpenSpec folder AND the Engram observation. The chained
+      PR strategy (C3) means an archive may run mid-stack; each PR carries its
+      own mini-archive under openspec/changes/archive/.
+
+conventions_observed:
+  - "Strict TypeScript via tsconfig.json extends astro/tsconfigs/strict"
+  - "Bilingual copy centralized in src/i18n.ts (Lang = 'en' | 'es')"
+  - "Static assets under public/assets/images/ (e.g. agent-lexi.webp)"
+  - "Component-per-concern in src/components/, one layout in src/layouts/"
+  - "Astro pages in src/pages/ with /es/ mirror for Spanish"
+  - "Conventional Commits enforced by recent history (fix:, feat:, chore:, docs:)"
+
+risks:
+  - "No test runner: downstream verification cannot run automated tests until Vitest is added."
+  - "No lint/format: style drift risk between manual edits and new backend code."
+  - "Project name drift (lb-co-global-advisors vs Taxalia): must be resolved before publishing the backend package."
+  - "Static chat widget rewrite: regressions in ChatWidget.astro are user-visible immediately."
+  - "gemma4:e4b is a 4B-active model: heavy multi-agent dispatch with many skills loaded may exceed context window — design must budget."
