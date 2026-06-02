@@ -49,16 +49,16 @@ Chain strategy: stacked-to-main
 
 ## Phase 4 (PR4): Orchestrator + parallel + synth + SSE
 
-- [ ] 4.1 `backend/src/ollama/client.ts` `OllamaClient({host, timeoutMs})` + `checkModel()` (R7: 404 → exit 1 naming `npm run setup`).
-- [ ] 4.2 `backend/src/ollama/stream.ts` `chatStream()` (R8 empty-delta filter, R10 abort ≤500ms).
-- [ ] 4.3 `backend/src/dispatch/orchestrator.ts` `route()` (meta-prompt + `format:'json'`; 10s; R2 parse-fail → empty + counter; R3 drop unknown ids + WARN).
-- [ ] 4.4 `backend/src/dispatch/semaphore.ts` FIFO; cap 2; env `DISPATCH_CONCURRENCY_CAP` (Q1).
-- [ ] 4.5 `backend/src/dispatch/parallel.ts` `runAgents()` (`Promise.allSettled`; per-agent `AbortController`; 30s → TIMEOUT). **Interface: returns `DispatchResult = AgentResult[]` (consumed by 4.6).**
-- [ ] 4.6 `backend/src/dispatch/synthesizer.ts` `synthesize()` (skip if `selected.length<2` OR all errored). **Input: `AgentResult[]` from 4.5 only — boundary isolated from session/streams.**
-- [ ] 4.7 `backend/src/dispatch/types.ts`: `OrchestratorDecision`, `AgentResult`, `DispatchResult`, `Lang`.
-- [ ] 4.8 Wire `POST /chat`: Zod → loaders → `route()` → `runAgents()` → `synthesize()` → `streamSSE` deltas → terminal `done` (agents[] always; warning en/es; requestId); cold-start 60s.
-- [ ] 4.9 Unit tests: `orchestrator.test.ts` (mock: ≥16/20 parse); `parallel.test.ts` (2 agents, one times out); `synthesizer.test.ts` (skipped when `<2` and when all errored).
-- [ ] 4.10 Integration tests: `chat.happy.test.ts` (valid → SSE + deltas + `done`); `chat.unreachable.test.ts` (Ollama down → 503 `OLLAMA_UNREACHABLE`); `abort.test.ts` (per-agent controllers fire ≤200ms); `cold-start.fixture.test.ts` (first SSE event ≤60s); `orchestrator.fixture.test.ts` (live `gemma4:e4b` 20 fixtures, ≥16 parseable).
+- [x] 4.1 `backend/src/ollama/client.ts` `OllamaClient({host, timeoutMs})` + `checkModel()` (R7: 404 → exit 1 naming `npm run setup`).
+- [x] 4.2 `backend/src/ollama/stream.ts` `chatStream()` (R8 empty-delta filter, R10 abort ≤500ms).
+- [x] 4.3 `backend/src/dispatch/orchestrator.ts` `route()` (meta-prompt + `format:'json'`; 10s; R2 parse-fail → empty + counter; R3 drop unknown ids + WARN).
+- [x] 4.4 `backend/src/dispatch/semaphore.ts` FIFO; cap 2; env `DISPATCH_CONCURRENCY_CAP` (Q1).
+- [x] 4.5 `backend/src/dispatch/parallel.ts` `runAgents()` (`Promise.allSettled`; per-agent `AbortController`; 30s → TIMEOUT). **Interface: returns `DispatchResult = AgentResult[]` (consumed by 4.6).**
+- [x] 4.6 `backend/src/dispatch/synthesizer.ts` `synthesize()` (skip if `selected.length<2` OR all errored). **Input: `AgentResult[]` from 4.5 only — boundary isolated from session/streams.**
+- [x] 4.7 `backend/src/dispatch/types.ts`: `OrchestratorDecision`, `AgentResult`, `DispatchResult`, `Lang`.
+- [x] 4.8 Wire `POST /chat`: Zod → loaders → `route()` → `runAgents()` → `synthesize()` → `streamSSE` deltas → terminal `done` (agents[] always; warning en/es; requestId); cold-start 60s.
+- [x] 4.9 Unit tests: `orchestrator.test.ts` (mock: ≥16/20 parse); `parallel.test.ts` (2 agents, one times out); `synthesizer.test.ts` (skipped when `<2` and when all errored).
+- [x] 4.10 Integration tests: `chat.happy.test.ts` (valid → SSE + deltas + `done`); `chat.unreachable.test.ts` (Ollama down → 503 `OLLAMA_UNREACHABLE`); `abort.test.ts` (per-agent controllers fire ≤200ms); `cold-start.fixture.test.ts` (first SSE event ≤60s); `orchestrator.fixture.test.ts` (live `gemma4:e4b` 20 fixtures, ≥16 parseable).
 
 ## Phase 5 (PR5): Frontend island replaces ChatWidget
 
