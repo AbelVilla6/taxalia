@@ -46,4 +46,4 @@
 
 ## Footer
 - [ ] Añadir sección de navegación secundaria (Privacy Policy, Terms of Service, Sitemap)
-- [ ] Enlace de Instagram `@hitaxalia` → sustituir por cuenta real si cambia
+- [ ] Enlace de Instagram `@hitaxalia` → sustituir por cuenta real si cambian
