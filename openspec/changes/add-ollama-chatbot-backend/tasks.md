@@ -36,16 +36,16 @@ Chain strategy: stacked-to-main
 
 ## Phase 3 (PR3): Loaders + systemPrompt (Medium risk)
 
-- [ ] 3.1 `backend/src/{agents,skills,conducta}/loader.ts` Zod schemas (`AgentDefSchema`, `SkillDefSchema`, `ConductDefSchema`).
-- [ ] 3.2 Personas `backend/src/agents/{advisory,valuation,financial}.md` (bilingual `system_prompt`).
-- [ ] 3.3 Skills `backend/src/skills/{lookup-engagement-model,calculate-valuation,capture-lead}.md`.
-- [ ] 3.4 Conducta `backend/src/conducta/{never-pretend,cite-sources,bilingual-response,privacy-no-pii,handoff-to-human}.md` (priority ints).
-- [ ] 3.5 `loadAgents`/`loadSkills`/`loadConducta` enforce R4/R5/R6 (count=5, file path, duplicate id).
-- [ ] 3.6 `backend/src/ollama/models.ts`: `MODEL = 'gemma4:e4b'` + `tokenEstimate(text)` (`Math.ceil(len/4)`).
-- [ ] 3.7 `backend/src/dispatch/systemPrompt.ts` `assembleSystemPrompt()`: base-identity → conducta sorted asc `\n\n---\n\n` → agent SP → skill bullets; throws `SystemPromptTooLargeError` >1500 tokens.
-- [ ] 3.8 Add `POST /admin/reload` (dev only, atomic swap).
-- [ ] 3.9 Unit tests: `loaders.test.ts` (happy + missing field names file + duplicate id + count != 5); `systemPrompt.test.ts` (purity 1000× byte-equal + conduct ordering + bilingual headers); `tokenEstimate.test.ts` (≤15% error); `systemPrompt.budget.test.ts` (1700-token throws).
-- [ ] 3.10 `tests/integration/reload.test.ts`: malformed file → 500; in-memory unchanged (R7).
+- [x] 3.1 `backend/src/{agents,skills,conducta}/loader.ts` Zod schemas (`AgentDefSchema`, `SkillDefSchema`, `ConductDefSchema`).
+- [x] 3.2 Personas `backend/src/agents/{advisory,valuation,financial}.md` (bilingual `system_prompt`).
+- [x] 3.3 Skills `backend/src/skills/{lookup-engagement-model,calculate-valuation,capture-lead}.md`.
+- [x] 3.4 Conducta `backend/src/conducta/{never-pretend,cite-sources,bilingual-response,privacy-no-pii,handoff-to-human}.md` (priority ints).
+- [x] 3.5 `loadAgents`/`loadSkills`/`loadConducta` enforce R4/R5/R6 (count=5, file path, duplicate id).
+- [x] 3.6 `backend/src/ollama/models.ts`: `MODEL = 'gemma4:e4b'` + calibrated `tokenEstimate(text)` (`Math.ceil(len/4 + 10)`).
+- [x] 3.7 `backend/src/dispatch/systemPrompt.ts` `assembleSystemPrompt()`: base-identity → conducta sorted asc `\n\n---\n\n` → agent SP → skill bullets; throws `SystemPromptTooLargeError` >1500 tokens.
+- [x] 3.8 Add `POST /admin/reload` (dev only, atomic swap).
+- [x] 3.9 Unit tests: `loaders.test.ts` (happy + missing field names file + duplicate id + count != 5); `systemPrompt.test.ts` (purity 1000× byte-equal + conduct ordering + bilingual headers); `tokenEstimate.test.ts` (≤15% error); `systemPrompt.budget.test.ts` (1700-token throws).
+- [x] 3.10 `tests/integration/reload.test.ts`: malformed file → 500; in-memory unchanged (R7).
 
 ## Phase 4 (PR4): Orchestrator + parallel + synth + SSE
 

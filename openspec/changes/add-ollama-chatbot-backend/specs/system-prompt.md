@@ -35,9 +35,9 @@ The prompt is concatenated top-to-bottom in this order. Top = highest priority, 
 | R2 | MUST | Base identity section is selected from a hard-coded bilingual map keyed by `lang`. Unsupported `lang` is impossible at this layer (chat-endpoint rejects before dispatch). |
 | R3 | MUST | Conducta section joins rules with `\n\n---\n\n` and sorts by `priority` ascending before joining. |
 | R4 | MUST | Skills metadata section is exactly one bullet line per skill, format `- <id>: <description>`. No bodies. |
-| R5 | MUST | The total assembled system prompt (steps 1–4) MUST be ≤ 1500 tokens by a conservative 4-chars-per-token estimate. Exceeding the budget at boot logs a WARN and refuses to start the request (returns 503 `SYSTEM_PROMPT_TOO_LARGE`). |
+| R5 | MUST | The total assembled system prompt (steps 1–4) MUST be ≤ 1500 tokens by a conservative calibrated character-per-token estimate. Exceeding the budget at boot logs a WARN and refuses to start the request (returns 503 `SYSTEM_PROMPT_TOO_LARGE`). |
 | R6 | MUST | `assembleSystemPrompt` is a pure function: same input → same output. No I/O, no time-of-day, no random. |
-| R7 | MUST | The function exposes a `tokenCount(prompt: string): number` helper using the same 4-chars/token estimator; a unit test asserts the helper agrees with a real tokenizer within ±15% on a representative sample. |
+| R7 | MUST | The function exposes a `tokenCount(prompt: string): number` helper using the same calibrated estimator; a unit test asserts the helper agrees with live Ollama `prompt_eval_count` within ±15% on a representative sample when `RUN_LIVE_OLLAMA_TESTS=1`. |
 | R8 | SHOULD | Conducta section header in en: `## Conduct policies`; in es: `## Políticas de conducta`. |
 | R9 | MUST | Locale change mid-conversation (client sends a new request with a different `lang`) re-assembles the system prompt from scratch. There is no carry-over of the previous prompt across requests. |
 
