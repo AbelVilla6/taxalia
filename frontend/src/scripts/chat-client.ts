@@ -110,10 +110,11 @@ export function init(options: InitOptions = {}): void {
     const inputEl = widget.querySelector<HTMLInputElement>('#chat-text');
     const sendEl = widget.querySelector<HTMLButtonElement>('#chat-send');
     const closeEl = widget.querySelector<HTMLButtonElement>('#chat-close');
+    const launcherEl = document.querySelector<HTMLButtonElement>('#chat-launcher');
     const typingEl = widget.querySelector<HTMLElement>('#chat-typing');
     const errorEl = widget.querySelector<HTMLElement>('#chat-error');
 
-    if (!messagesEl || !formEl || !inputEl || !sendEl || !closeEl || !typingEl || !errorEl) {
+    if (!messagesEl || !formEl || !inputEl || !sendEl || !closeEl || !launcherEl || !typingEl || !errorEl) {
       console.error('[chat-client] required widget sub-elements missing');
       return;
     }
@@ -364,7 +365,15 @@ export function init(options: InitOptions = {}): void {
 
     closeEl.addEventListener('click', () => {
       cancelActive();
-      widget.remove();
+      widget.hidden = true;
+      launcherEl.hidden = false;
+      launcherEl.focus();
+    });
+
+    launcherEl.addEventListener('click', () => {
+      launcherEl.hidden = true;
+      widget.hidden = false;
+      inputEl.focus();
     });
 
     void resetAssistant;

@@ -1,5 +1,6 @@
 ---
 import { localizePath, ui, type Lang } from '../i18n';
+import ChatAgentAvatar from './ChatAgentAvatar.astro';
 
 export interface Props {
   lang?: Lang;
@@ -13,14 +14,11 @@ const apiBase = (import.meta.env.PUBLIC_CHAT_API_BASE ?? 'http://localhost:4324'
 <div id="chat-widget" class="chat-widget" role="complementary" aria-label={copy.ariaLabel}>
   <div class="chat-widget-header">
     <div class="chat-agent">
-      <img
+      <ChatAgentAvatar
         class="chat-agent-avatar"
-        src="/assets/images/agent-lexi.webp"
         alt={copy.imageAlt}
-        width="40"
-        height="40"
-        loading="lazy"
-        onerror="this.style.display='none'"
+        width={40}
+        height={40}
       />
       <div>
         <p class="chat-agent-name">{copy.personaName}</p>
@@ -68,3 +66,19 @@ const apiBase = (import.meta.env.PUBLIC_CHAT_API_BASE ?? 'http://localhost:4324'
 
   <script type="application/json" id="chat-config" is:inline set:html={JSON.stringify({ apiBase, lang })}></script>
 </div>
+
+<button
+  id="chat-launcher"
+  class="chat-launcher"
+  type="button"
+  aria-label={copy.open}
+  aria-controls="chat-widget"
+  hidden
+>
+  <ChatAgentAvatar
+    class="chat-launcher-avatar"
+    alt={copy.imageAlt}
+    width={64}
+    height={64}
+  />
+</button>
