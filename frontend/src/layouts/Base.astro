@@ -75,11 +75,11 @@ const alternateEs = new URL(localizePath('es', basePath), site).toString();
         drawer?.classList.remove('is-open');
       });
 
-      // Chat widget close
-      const chatClose = document.getElementById('chat-close');
-      const chatWidget = document.getElementById('chat-widget');
-      chatClose?.addEventListener('click', () => {
-        chatWidget?.remove();
+      // Chat widget bootstrap
+      import('../scripts/chat-client.ts').then(({ init }) => {
+        init({ mount: '#chat-widget', config: '#chat-config' });
+      }).catch((err) => {
+        console.error('[chat] failed to load chat-client.ts', err);
       });
     </script>
   </body>

@@ -62,9 +62,9 @@ Chain strategy: stacked-to-main
 
 ## Phase 5 (PR5): Frontend island replaces ChatWidget
 
-- [ ] 5.1 Extend `src/i18n.ts` `ui[lang].chat` with 8 new keys; keep 6; `action` retained for rollback.
-- [ ] 5.2 Replace `src/components/ChatWidget.astro` (keep Props + IDs + `.chat-*`; `<a>` → message list + `<form>` + handoff; literal `"Lexi"` → `{copy.personaName}`).
-- [ ] 5.3 Create `src/scripts/chat-client.ts` `init({mount, config})` (native `fetch`/`ReadableStream`/`AbortController`/`crypto.randomUUID`; per-turn `X-Request-Id`; SSE delta append; close → abort; 30s safety net; `done.warning` badge).
-- [ ] 5.4 Append `.chat-messages` (with `max-height: 60vh; overflow-y: auto`), `.chat-input`, `.chat-msg--user`, `.chat-msg--assistant`, `.chat-typing` to `src/assets/css/lb-co.css`.
-- [ ] 5.5 Replace close handler in `src/layouts/Base.astro` (lines 78–83) with bootstrap importing `chat-client.ts`; inject `<script type="application/json" id="chat-config">` with `apiBase` + `lang`.
-- [ ] 5.6 Verify: `npm run build` passes; zero new frontend deps; no `astro.config.mjs` change; `<ChatWidget lang>` mounts unchanged; client logs `requestId` + latency only; Vitest snapshot confirms 5 new CSS classes.
+- [x] 5.1 Extend `src/i18n.ts` `ui[lang].chat` with 8 new keys; keep 6; `action` retained for rollback.
+- [x] 5.2 Replace `src/components/ChatWidget.astro` (keep Props + IDs + `.chat-*`; `<a>` → message list + `<form>` + handoff; literal `"Lexi"` → `{copy.personaName}`).
+- [x] 5.3 Create `src/scripts/chat-client.ts` `init({mount, config})` (native `fetch`/`ReadableStream`/`AbortController`/`crypto.randomUUID`; per-turn `X-Request-Id`; SSE delta append; close → abort; 30s safety net; `done.warning` badge).
+- [x] 5.4 Append `.chat-messages` (with `max-height: 60vh; overflow-y: auto`), `.chat-input`, `.chat-msg--user`, `.chat-msg--assistant`, `.chat-typing` to `src/assets/css/lb-co.css`.
+- [x] 5.5 Replace close handler in `src/layouts/Base.astro` (lines 78–83) with bootstrap importing `chat-client.ts`; inject `<script type="application/json" id="chat-config">` with `apiBase` + `lang`.
+- [x] 5.6 Verify: `npm run build` passes; zero new frontend deps; no `astro.config.mjs` change; `<ChatWidget lang>` mounts unchanged; client logs `requestId` + latency only; Vitest snapshot confirms 5 new CSS classes.
