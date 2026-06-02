@@ -12,8 +12,8 @@ This change replaces taxalia's static `src/components/ChatWidget.astro` with a r
 ```
 backend/
 ├── package.json                    # @taxalia/chatbot-backend, strict TS, vitest
-├── tsconfig.json                   # extends ../../tsconfig.json (strict)
-├── vitest.config.ts
+├── tsconfig.json                   # extends ../tsconfig.json (strict)
+├── vitest.config.ts                # unit + integration projects
 ├── .env.example                    # OLLAMA_HOST, PORT, OLLAMA_AGENT_TIMEOUT_MS, CORS_ALLOWED_ORIGINS
 ├── src/
 │   ├── chat/                       # HTTP surface (Hono routes, SSE, Zod schemas)
@@ -475,7 +475,7 @@ The `coldStart` flag is per-process and flips to `false` on the first successful
 | Frontend smoke | Manual: open `localhost:4321`, send 1 message, see streamed reply, click close, abort propagates | manual + Vitest snapshot of added CSS classes | PR5 |
 | Frontend snapshot | Vitest snapshot of `lb-co.css` confirms the 5 new class names exist; `.chat-messages { max-height: 60vh; overflow-y: auto; }` present | sdd-verify, separate | PR5 |
 
-**Vitest structure**: `tests/unit/`, `tests/integration/`, `tests/fixtures/{agents,skills,conducta}/`. `vitest.config.ts` separates the two layers with `test.unit` / `test.integration` projects; `npm test` runs both. `concurrent: false` for the cold-start fixture (it owns the Ollama process).
+**Vitest structure**: `tests/unit/`, `tests/integration/`, `tests/fixtures/{agents,skills,conducta}/`. `vitest.config.ts` separates the two layers into `unit` / `integration` projects; `npm test` runs both. `concurrent: false` for the cold-start fixture (it owns the Ollama process).
 
 **NOT tested in v1**: model output quality, factual accuracy, language fidelity end-to-end (manual eval, owner = Felipe). Tool-call flow (v2). Multi-tenancy / rate limiting / billing (out of scope). Hot-reload via `fs.watch` (out of scope per loaders R9). SSE reconnect with `Last-Event-ID` (R15 MUST NOT, client restarts).
 

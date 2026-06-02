@@ -24,15 +24,15 @@ Chain strategy: stacked-to-main
 
 ## Phase 2 (PR2): Backend skeleton + Vitest + SSE
 
-- [ ] 2.1 `backend/package.json` `name:"@taxalia/chatbot-backend"`, scripts `dev`/`start`/`test`, Node ≥25; `tsconfig.json` extends `../../tsconfig.json` (strict).
-- [ ] 2.2 **Wire Vitest + `npm test`** in `backend/package.json` (FIRST backend task; flips `strict_tdd` on); `vitest.config.ts` with `test.unit` / `test.integration` projects.
-- [ ] 2.3 Install `hono`, `zod`, `pino`, `ollama`, `vitest`, `@types/node` in `backend/`.
-- [ ] 2.4 `backend/src/config.ts` Zod env: `OLLAMA_HOST`, `PORT`, `OLLAMA_AGENT_TIMEOUT_MS`, `CORS_ALLOWED_ORIGINS`, `LOG_LEVEL`, `DISPATCH_CONCURRENCY_CAP`.
-- [ ] 2.5 `backend/src/observability/{logger,requestId,metrics}.ts`: Pino, X-Request-Id, counters, `GET /metrics` JSON.
-- [ ] 2.6 `backend/src/chat/schemas.ts` Zod: `Lang`, `Message`, `ChatRequest`, `DeltaEvent`, `AgentResult`, `DoneEnvelope`, `ErrorEnvelope`; `sse.ts` `streamSSE` helpers (outer abort = `c.req.raw.signal`).
-- [ ] 2.7 `backend/src/chat/routes.ts`: `GET /health` 200 `{"ok":true,"model":"gemma4:e4b"}` <100ms; `POST /chat` 400 on bad lang/empty/bad body, else 501.
-- [ ] 2.8 `backend/src/server.ts` Hono + CORS allowlist (`localhost:4321`, `4322`).
-- [ ] 2.9 `tests/integration/`: `health.test.ts` (200 <100ms; mock Ollama never invoked); `chat.errors.test.ts` (bad lang → `UNSUPPORTED_LANG`; empty → `EMPTY_MESSAGE`; bad body → `BAD_REQUEST`).
+- [x] 2.1 `backend/package.json` `name:"@taxalia/chatbot-backend"`, scripts `dev`/`start`/`test`, Node ≥25; `tsconfig.json` extends `../tsconfig.json` (strict).
+- [x] 2.2 **Wire Vitest + `npm test`** in `backend/package.json` (FIRST backend task; flips `strict_tdd` on); `vitest.config.ts` with `unit` / `integration` projects.
+- [x] 2.3 Install `hono`, `zod`, `pino`, `ollama`, `vitest`, `@types/node` in `backend/`.
+- [x] 2.4 `backend/src/config.ts` Zod env: `OLLAMA_HOST`, `PORT`, `OLLAMA_AGENT_TIMEOUT_MS`, `CORS_ALLOWED_ORIGINS`, `LOG_LEVEL`, `DISPATCH_CONCURRENCY_CAP`.
+- [x] 2.5 `backend/src/observability/{logger,requestId,metrics}.ts`: Pino, X-Request-Id, counters, `GET /metrics` JSON.
+- [x] 2.6 `backend/src/chat/schemas.ts` Zod: `Lang`, `Message`, `ChatRequest`, `DeltaEvent`, `AgentResult`, `DoneEnvelope`, `ErrorEnvelope`; `sse.ts` `streamSSE` helpers (outer abort = `c.req.raw.signal`).
+- [x] 2.7 `backend/src/chat/routes.ts`: `GET /health` 200 `{"ok":true,"model":"gemma4:e4b"}` <100ms; `POST /chat` 400 on bad lang/empty/bad body, else 501.
+- [x] 2.8 `backend/src/server.ts` Hono + CORS allowlist (`localhost:4321`, `4322`).
+- [x] 2.9 `tests/integration/`: `health.test.ts` (200 <100ms; mock Ollama never invoked); `chat.errors.test.ts` (bad lang → `UNSUPPORTED_LANG`; empty → `EMPTY_MESSAGE`; bad body → `BAD_REQUEST`).
 
 ## Phase 3 (PR3): Loaders + systemPrompt (Medium risk)
 
