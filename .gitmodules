@@ -1,0 +1,6 @@
+[submodule "frontend"]
+	path = frontend
+	url = https://github.com/AbelVilla6/taxalia-frontend.git
+[submodule "backend"]
+	path = backend
+	url = https://github.com/AbelVilla6/taxalia-backend.git
