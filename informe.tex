@@ -1,0 +1,542 @@
+\documentclass[11pt,a4paper]{article}
+
+% ---------------------------------------------------------------------------
+% Informe técnico — Proyecto Taxalia
+% Compilar con: pdflatex informe.tex  (dos pasadas para el índice)
+% ---------------------------------------------------------------------------
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-tabla]{babel}
+\usepackage[a4paper,margin=2.4cm]{geometry}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{listings}
+\usepackage[hidelinks]{hyperref}
+
+% --- Paleta (dorado/azul corporativo Taxalia) -----------------------------
+\definecolor{tax-gold}{HTML}{B8860B}
+\definecolor{tax-ink}{HTML}{1F2A37}
+\definecolor{tax-slate}{HTML}{475569}
+\definecolor{tax-bg}{HTML}{F8FAFC}
+\definecolor{tax-line}{HTML}{E2E8F0}
+
+\hypersetup{
+  pdftitle={Informe técnico — Proyecto Taxalia},
+  pdfauthor={Equipo Taxalia},
+  colorlinks=true,
+  linkcolor=tax-ink,
+  urlcolor=tax-gold,
+  citecolor=tax-gold
+}
+
+% --- Títulos --------------------------------------------------------------
+\titleformat{\section}
+  {\color{tax-ink}\Large\bfseries}{\color{tax-gold}\thesection}{0.8em}{}
+\titleformat{\subsection}
+  {\color{tax-ink}\large\bfseries}{\color{tax-gold}\thesubsection}{0.7em}{}
+\titlespacing*{\section}{0pt}{2.2ex plus 1ex minus .2ex}{1.2ex plus .2ex}
+
+% --- Cabecera/pie ---------------------------------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancyhead[L]{\small\color{tax-slate}Taxalia}
+\fancyhead[R]{\small\color{tax-slate}Informe técnico}
+\fancyfoot[C]{\small\color{tax-slate}\thepage}
+
+% --- Estilo de código -----------------------------------------------------
+\lstdefinestyle{tax}{
+  basicstyle=\ttfamily\small,
+  backgroundcolor=\color{tax-bg},
+  frame=single,
+  rulecolor=\color{tax-line},
+  keywordstyle=\color{tax-gold}\bfseries,
+  commentstyle=\color{tax-slate}\itshape,
+  stringstyle=\color{tax-ink},
+  breaklines=true,
+  showstringspaces=false,
+  columns=fullflexible,
+  numbers=none,
+  xleftmargin=8pt,
+  xrightmargin=8pt,
+  aboveskip=10pt,
+  belowskip=6pt
+}
+\lstset{style=tax}
+
+% Comando para identificadores inline
+\newcommand{\code}[1]{\texttt{\small #1}}
+
+% Caja de destacado
+\newcommand{\destacado}[1]{%
+  \begin{center}
+  \fcolorbox{tax-line}{tax-bg}{%
+    \parbox{0.94\linewidth}{\vspace{4pt}\small #1\vspace{4pt}}}
+  \end{center}}
+
+\setlist[itemize]{leftmargin=1.4em,itemsep=2pt,topsep=3pt}
+
+% ===========================================================================
+\begin{document}
+
+% --- Portada --------------------------------------------------------------
+\begin{titlepage}
+\thispagestyle{empty}
+\centering
+\vspace*{2.5cm}
+{\color{tax-gold}\rule{\linewidth}{2pt}}\\[0.6cm]
+{\Huge\bfseries\color{tax-ink} Proyecto Taxalia}\\[0.4cm]
+{\LARGE\color{tax-slate} Web corporativa + asistente conversacional Lexi}\\[0.3cm]
+{\color{tax-gold}\rule{\linewidth}{2pt}}\\[1.2cm]
+
+{\large\bfseries Informe técnico}\\[0.3cm]
+{\large Decisiones, tecnología y el sistema multiagente}\\[2.5cm]
+
+\begin{tabular}{rl}
+  \textbf{Proyecto:}    & Taxalia (firma de asesoría) \\[3pt]
+  \textbf{Arquitectura:}& Meta-repo: frontend Astro + backend de chatbot \\[3pt]
+  \textbf{Agente:}      & Lexi — orquestador multiagente sobre Ollama \\[3pt]
+  \textbf{Fecha:}       & Junio de 2026 \\
+\end{tabular}
+
+\vfill
+{\small\color{tax-slate} Documento generado a partir del estado real del
+repositorio: ADRs, artefactos SDD y código fuente del backend y el frontend.}
+\end{titlepage}
+
+% --- Índice ---------------------------------------------------------------
+\tableofcontents
+\newpage
+
+% ===========================================================================
+\section{Resumen ejecutivo}
+
+Taxalia es la web corporativa de una firma de asesoría profesional
+(consultoría, valoración y acompañamiento estratégico). El proyecto va más
+allá de un sitio estático: incorpora \textbf{Lexi}, un asistente
+conversacional propio construido como un \textbf{sistema multiagente} que se
+ejecuta contra un modelo de lenguaje local (Ollama) y se despliega también en
+la nube.
+
+La pieza diferencial no es ``un chatbot'' sino la \textbf{ingeniería que lo
+sostiene}: un orquestador que decide qué agentes responden, ejecución en
+paralelo con cancelación cooperativa, un sintetizador que funde varias
+respuestas en una sola, políticas de conducta versionadas en disco y una
+estrategia de pruebas y observabilidad de nivel producción.
+
+\destacado{\textbf{En una frase:} una web ligera en Astro con coste de
+dependencias casi nulo, y detrás un backend de agentes en TypeScript estricto,
+diseñado con metodología \emph{Spec-Driven Development} (SDD), decisiones
+documentadas como ADR y un contrato HTTP/SSE que desacopla por completo el
+front del motor de IA.}
+
+\subsection{Cifras del proyecto}
+
+\begin{center}
+\begin{tabular}{@{}lr@{}}
+\toprule
+\textbf{Indicador} & \textbf{Valor} \\
+\midrule
+Código fuente del backend (TypeScript) & $\sim$2.655 líneas \\
+Ficheros fuente del backend            & 36 módulos \\
+Suites de pruebas del backend          & 22 ficheros (unitarias + integración) \\
+Código fuente del frontend             & $\sim$3.220 líneas \\
+Agentes especializados                 & 3 (advisory, valuation, financial) \\
+Políticas de conducta                  & 5 (cargadas en arranque) \\
+Capacidades (skills)                   & 3 \\
+Nuevas dependencias npm en el frontend & 0 \\
+Decisiones de arquitectura formales    & 2 ADR + 6 SDD \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+% ===========================================================================
+\section{Contexto y objetivos}
+
+La web de Taxalia se diseñó para presentar la identidad de la empresa, mostrar
+sus servicios, publicar contenidos de blog y facilitar el contacto, con
+soporte multilingüe (inglés y español). El sitio es estático, ligero y fácil
+de desplegar.
+
+El punto de partida tenía una limitación clara: el \emph{widget} de chat era un
+ancla estática que redirigía a la página de contacto. El objetivo del trabajo
+fue \textbf{sustituir ese marcador por una superficie conversacional real},
+sin comprometer la simplicidad del sitio: sin integraciones de Astro, sin
+cambios en el \emph{pipeline} de build y \textbf{sin añadir una sola
+dependencia npm al frontend}.
+
+\destacado{La restricción de diseño \emph{``cero dependencias nuevas en el
+front''} obligó a una solución limpia: el cliente de chat usa solo APIs nativas
+del navegador (\code{fetch}, \code{ReadableStream}, \code{AbortController},
+\code{crypto.randomUUID}). Toda la complejidad vive en un backend
+independiente, conectado por un contrato HTTP.}
+
+% ===========================================================================
+\section{Arquitectura general}
+
+El repositorio es un \textbf{meta-repo} con dos proyectos hermanos y autónomos,
+más la tooling transversal:
+
+\begin{lstlisting}
+taxalia/                  <- meta-repo (sin package.json propio)
+|-- docs/adr/             <- decisiones de arquitectura (ADR)
+|-- openspec/             <- artefactos SDD (propuesta, diseno, specs, tareas)
+|-- scripts/setup.mjs     <- bootstrap de ambos lados (cross-platform)
+|-- setup.sh              <- wrapper Unix delgado
+|-- frontend/             <- sitio Astro (submodulo Git)
+|   |-- src/components/    ChatWidget.astro, Header, Hero, Services...
+|   |-- src/scripts/       chat-client.ts (consumidor SSE)
+|   `-- src/pages/         index, services, blog, contact, /es/...
+`-- backend/              <- chatbot multiagente (submodulo Git)
+    `-- src/{chat,agents,skills,conducta,dispatch,ollama,observability}
+\end{lstlisting}
+
+Cada lado es independiente: \code{cd frontend \&\& npm install \&\& npm run
+dev} funciona sin asumir nada de la raíz, y el backend declara su propia
+configuración de TypeScript sin depender de ficheros del front.
+
+\subsection{Arquitectura ``screaming''}
+
+El backend aplica \emph{screaming architecture}: los nombres de carpeta gritan
+el dominio, no el framework. Las carpetas (\code{chat}, \code{agents},
+\code{skills}, \code{conducta}, \code{dispatch}, \code{ollama},
+\code{observability}) sobreviven a cualquier cambio de tecnología: si se
+sustituye Hono, \code{chat/} permanece; si se sustituye Ollama, \code{ollama/}
+pasa a llamarse \code{inference/}. El dominio manda sobre la herramienta.
+
+% ===========================================================================
+\section{Decisiones tomadas}
+
+Las decisiones no son implícitas: están documentadas como \textbf{ADR}
+(Architecture Decision Records) y como resoluciones dentro del flujo
+\textbf{SDD}. Esto deja una traza auditable del \emph{por qué}, no solo del
+\emph{qué}.
+
+\subsection{Decisiones de estructura (ADR)}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{@{}p{0.16\linewidth}p{0.46\linewidth}p{0.30\linewidth}@{}}
+\toprule
+\textbf{ADR} & \textbf{Decisión} & \textbf{Razón} \\
+\midrule
+0001 — Backend hermano &
+Mantener backend como carpeta hermana \code{backend/}, sin npm workspaces. &
+Un solo servicio; se difiere la tooling de monorepo hasta que aparezca un
+segundo backend o un paquete compartido. \\
+0002 — Frontend agrupado &
+Mover el proyecto Astro a \code{frontend/}; la raíz queda como meta-repo puro
+sin código de aplicación. &
+Separa la app de la tooling transversal; rompe el acoplamiento oculto del
+\code{tsconfig} del backend hacia el front. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Ambos ADR fijan el mismo \textbf{disparador de migración} a npm workspaces:
+cuando exista un segundo backend \emph{o} un paquete compartido por ambos
+lados. Hasta entonces, la forma multirepo es la correcta.
+
+\subsection{Decisiones del agente (SDD)}
+
+El sistema multiagente se diseñó con \emph{Spec-Driven Development}: primero
+exploración, luego propuesta, especificaciones, diseño y tareas, antes de
+escribir código. Las decisiones clave resueltas:
+
+\begin{center}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{@{}p{0.22\linewidth}p{0.40\linewidth}p{0.30\linewidth}@{}}
+\toprule
+\textbf{Cuestión} & \textbf{Decisión} & \textbf{Razón} \\
+\midrule
+Agentes v1 &
+\code{advisory}, \code{valuation}, \code{financial}. &
+Alinea los agentes con la taxonomía real de servicios de la web. \\
+Conducta v1 &
+5 políticas: no fingir, citar fuentes, respuesta bilingüe, sin PII, traspaso a
+humano. &
+Cubre la superficie de riesgo v1: alucinación, citación, idioma, privacidad y
+escalado. \\
+Concurrencia &
+Tope de 2 \emph{dispatches} simultáneos vía semáforo en proceso. &
+Un equipo M3 de 16\,GB se satura con 2 dispatches; más invita a OOM. \\
+Reintentos &
+Sin reintentos automáticos ante fallo transitorio; \emph{fail loud} con aviso. &
+Los reintentos silenciosos en un modelo local pequeño producen UX confusa. \\
+Autenticación &
+Anónimo + lista blanca CORS. &
+El backend corre en local sobre Ollama; sin exposición pública en v1. \\
+Estimador de tokens &
+Heurística calibrada (4 chars/token + sobrecarga). &
+Validada contra \code{prompt\_eval\_count} real de Ollama, error $\leq$15\%. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Decisión de entrega: PRs encadenados}
+
+El trabajo se planificó como \textbf{5 pull requests encadenados}, cada uno
+con un presupuesto de revisión $\leq$400 líneas, para mantener la revisión
+enfocada: (1) higiene + setup, (2) esqueleto Hono + contrato SSE,
+(3) cargadores + ensamblado del system prompt, (4) orquestador + dispatch
+paralelo + sintetizador, (5) reemplazo del widget y cableado SSE en el front.
+Cada PR define su propio plan de \emph{rollback}.
+
+% ===========================================================================
+\section{Stack tecnológico}
+
+\subsection{Frontend}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{@{}p{0.26\linewidth}p{0.66\linewidth}@{}}
+\toprule
+\textbf{Tecnología} & \textbf{Rol} \\
+\midrule
+Astro 6.3 & Generación de sitio estático, ligero y fácil de desplegar. \\
+TypeScript & \code{chat-client.ts}: consumidor SSE y enlaces al DOM. \\
+i18n manual & Estrategia propia (\code{/es/} + \code{i18n.ts}), sin
+\code{@astrojs/i18n}. \\
+CSS propio & \code{lb-co.css}; estética corporativa dorado/azul. \\
+APIs nativas & \code{fetch}, \code{ReadableStream}, \code{AbortController}. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Backend del agente}
+
+\begin{center}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{@{}p{0.26\linewidth}p{0.66\linewidth}@{}}
+\toprule
+\textbf{Tecnología} & \textbf{Rol} \\
+\midrule
+Node 24 + TypeScript estricto & Runtime y tipado fuerte de extremo a extremo. \\
+Hono & Framework HTTP que sirve la superficie de chat y el streaming SSE. \\
+Zod & Esquemas como única fuente de verdad (request, SSE, defs de ficheros). \\
+Ollama (\code{ollama-js}) & Cliente del modelo; \code{gemma4:e4b} en local,
+\code{gemma4:31b-cloud} en producción. \\
+Pino & Logging estructurado con \code{requestId} por petición. \\
+Vitest & Pruebas unitarias y de integración (proyectos separados). \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+El \textbf{contrato de tipos} se define una sola vez con Zod y se infiere con
+\code{z.infer<...>}, de modo que el esquema de validación en runtime y el tipo
+de TypeScript nunca divergen.
+
+% ===========================================================================
+\section{El agente Lexi: el corazón del proyecto}
+
+Aquí está el verdadero valor. ``Lexi'' no es una llamada a un LLM con un
+prompt: es un \textbf{sistema multiagente} con orquestación, paralelismo,
+síntesis, políticas y observabilidad. Estos son sus componentes.
+
+\subsection{Personas como ficheros en disco}
+
+Agentes, capacidades y conducta son \textbf{ficheros Markdown con frontmatter
+YAML}. Cambiar el comportamiento del asistente no requiere tocar código:
+basta editar un fichero y reiniciar (o llamar a \code{POST /admin/reload} en
+desarrollo).
+
+\begin{lstlisting}
+---
+id: advisory
+name: Advisory Services Assistant
+description: Helps users understand Taxalia advisory services.
+system_prompt: |
+  You are Taxalia's advisory services assistant. Explain
+  engagement models clearly in English or Spanish...
+tools: [lookup-engagement-model, capture-lead]
+tags: [advisory, services]
+---
+\end{lstlisting}
+
+Esta separación \emph{datos vs. código} es lo que convierte al asistente en un
+producto mantenible por personas no programadoras.
+
+\subsection{El pipeline de una conversación}
+
+Cada mensaje del usuario atraviesa cuatro etapas claramente separadas:
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+\item \textbf{Orquestación} — una llamada al modelo en formato JSON decide
+\emph{qué} agentes deben responder (\code{agentsToRun}). Saludos o intención
+desconocida producen un array vacío. Nunca se inventan agentes.
+\item \textbf{Dispatch paralelo} — los agentes seleccionados se ejecutan a la
+vez (\code{Promise.allSettled}), cada uno con timeout de 30\,s y su propio
+\code{AbortController} enlazado a la señal externa.
+\item \textbf{Síntesis} — si responden 2 o más agentes, un sintetizador funde
+sus salidas en una única respuesta coherente.
+\item \textbf{Streaming SSE} — la respuesta vuelve al navegador token a token
+como \emph{Server-Sent Events}; el widget va componiendo la burbuja.
+\end{enumerate}
+
+\destacado{\textbf{Cancelación cooperativa de extremo a extremo.} Si el usuario
+cierra el chat, el \code{AbortController} del navegador propaga la señal a la
+ruta de Hono, de ahí a cada \code{AbortController} por agente y de ahí al
+\emph{stream} de Ollama. Todo se cancela en $\leq$200\,ms. Es el tipo de detalle
+que separa un prototipo de un sistema bien construido.}
+
+\subsection{Ensamblado del system prompt por capas}
+
+El prompt de sistema se construye en un orden \textbf{deliberado}, de lo más
+general a lo más específico: conducta $\rightarrow$ persona del agente
+$\rightarrow$ metadatos de skills $\rightarrow$ historial. Este orden no es
+estético: es una defensa empírica frente a \emph{prompt injection}. Además,
+si el prompt supera 1.500 tokens, se rechaza con error explícito en lugar de
+degradar en silencio.
+
+\subsection{Las 5 políticas de conducta}
+
+Las políticas se cargan en arranque y se concatenan en \emph{cada} prompt de
+agente. El arranque \textbf{verifica que sean exactamente 5} (una sexta haría
+fallar el boot, a propósito: cada política debe ser una incorporación
+consciente).
+
+\begin{center}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{@{}p{0.26\linewidth}p{0.62\linewidth}@{}}
+\toprule
+\textbf{Política} & \textbf{Regla} \\
+\midrule
+\code{never-pretend}      & Decir ``no lo sé'' antes que inventar hechos,
+                            precios o conclusiones legales. \\
+\code{cite-sources}       & Citar una página de servicio de Taxalia o admitir
+                            que no hay fuente. \\
+\code{bilingual-response} & Responder en el idioma del usuario; no mezclar. \\
+\code{privacy-no-pii}     & No almacenar, repetir ni inventar datos personales. \\
+\code{handoff-to-human}   & Si piden un humano, ofrecer el enlace de contacto. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Observabilidad y manejo de fallos}
+
+El sistema es transparente sobre lo que ocurre:
+
+\begin{itemize}
+\item \textbf{Trazabilidad:} cada petición lleva un \code{requestId} (cabecera
+\code{X-Request-Id} o UUID v4 generado) que viaja por todos los logs y vuelve
+en el evento final del SSE.
+\item \textbf{Métricas:} contadores en memoria expuestos en \code{GET /metrics}
+(chats iniciados/completados, timeouts por agente, fallos parciales, errores de
+parseo del orquestador\dots).
+\item \textbf{Fallo parcial con aviso:} si un agente falla, su error se reporta
+en \code{done.agents[]} y el sintetizador trabaja con los que sí respondieron;
+el usuario ve un aviso de ``respuesta posiblemente incompleta''. Nunca se oculta
+un fallo.
+\item \textbf{Privacidad por diseño:} los logs registran \code{requestId},
+agentes, idioma, conteo de tokens y latencia, \textbf{nunca} el contenido de
+los mensajes.
+\end{itemize}
+
+% ===========================================================================
+\section{Calidad: pruebas y presupuestos}
+
+\subsection{Estrategia de pruebas}
+
+22 suites cubren las dos capas. Lo destacable es \emph{qué} se prueba:
+
+\begin{itemize}
+\item \textbf{Pureza del system prompt:} se ensambla 1.000 veces y se verifica
+que el resultado es idéntico byte a byte.
+\item \textbf{Carrera de cancelación:} un cliente sintético abre la conexión,
+espera el primer evento y aborta; se afirma que todos los \code{AbortController}
+disparan en $\leq$200\,ms.
+\item \textbf{Tasa de parseo del orquestador:} el modelo real se enfrenta a 20
+mensajes de prueba; criterio de aprobado $\geq$16/20 con JSON parseable.
+\item \textbf{Arranque en frío:} la primera petición contra un Ollama recién
+levantado responde dentro de la ventana de gracia de 60\,s.
+\end{itemize}
+
+\subsection{Presupuestos de rendimiento}
+
+Las metas no son aspiracionales: están escritas y testeadas.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{@{}p{0.58\linewidth}r@{}}
+\toprule
+\textbf{Métrica} & \textbf{Presupuesto} \\
+\midrule
+\code{GET /health} (sin llamar a Ollama)            & $\leq$100\,ms \\
+Gracia de arranque en frío (una vez por proceso)    & 60\,s \\
+Timeout por agente                                  & 30\,s \\
+System prompt ensamblado                            & $\leq$1.500 tokens \\
+Propagación del abort (cliente $\rightarrow$ Ollama)& $\leq$200\,ms \\
+Primer token con 2 agentes (en caliente)            & $\leq$8\,s \\
+Respuesta completa, 2 agentes ($\leq$200 tokens)    & $\leq$30\,s \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+% ===========================================================================
+\section{Despliegue}
+
+El sistema funciona en dos modos sin cambios de código, solo de configuración:
+
+\begin{itemize}
+\item \textbf{Local:} Ollama en \code{127.0.0.1:11434} con el modelo
+\code{gemma4:e4b}. El script \code{setup.sh} / \code{scripts/setup.mjs} es
+idempotente: comprueba Ollama, descarga el modelo y ejecuta \code{npm ci} en
+ambos lados.
+\item \textbf{Producción:} backend como función \emph{serverless} en Vercel
+(\code{vercel.json} incluye los ficheros de agentes/skills/conducta en el
+bundle), apuntando al modelo en la nube \code{gemma4:31b-cloud}.
+\end{itemize}
+
+La selección de host y modelo según \code{NODE\_ENV} está centralizada en
+\code{config.ts} y validada con Zod, de modo que un entorno mal configurado
+falla en el arranque con un mensaje claro, no a mitad de una petición.
+
+% ===========================================================================
+\section{Estado actual y próximos pasos}
+
+El núcleo conversacional está operativo de extremo a extremo: orquestación,
+dispatch paralelo, síntesis, streaming, conducta, observabilidad, pruebas y
+despliegue dual. El frontend ya integra el widget real con avatar, redimensionado
+y página de \emph{health check}.
+
+Quedan tareas de producto recogidas en el \emph{backlog} del proyecto, entre
+ellas: completar páginas internas (servicios individuales, blog con
+\emph{Content Collections}), conectar el formulario de contacto a un backend
+real, cerrar la internacionalización al español, y reforzar SEO/accesibilidad
+(sitemap, \code{robots.txt}, Open Graph, JSON-LD, navegación por teclado).
+
+% ===========================================================================
+\section{Conclusión}
+
+Taxalia demuestra que se puede añadir IA conversacional a un sitio estático
+\textbf{sin sacrificar su simplicidad ni inflar sus dependencias}. El valor no
+está en ``tener un chatbot'', sino en cómo está construido:
+
+\begin{itemize}
+\item Un \textbf{sistema multiagente} real —orquestador, paralelismo,
+sintetizador— en lugar de una llamada suelta a un LLM.
+\item \textbf{Separación datos/código:} personas y políticas como ficheros
+editables sin tocar el motor.
+\item \textbf{Robustez de producción:} cancelación cooperativa, fallo parcial
+con aviso, presupuestos de rendimiento testeados y observabilidad con
+\code{requestId} de punta a punta.
+\item \textbf{Disciplina de ingeniería:} decisiones documentadas (ADR + SDD),
+TypeScript estricto, contrato de tipos único con Zod y entrega en PRs
+encadenados revisables.
+\end{itemize}
+
+\destacado{El agente montado es la mejor carta de presentación técnica del
+proyecto: un componente pequeño en líneas de código pero grande en criterio de
+ingeniería, donde cada decisión está justificada y cada modo de fallo está
+previsto.}
+
+\end{document}
