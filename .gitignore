@@ -1,3 +1,7 @@
+# local dotfiles/directories (keep this file tracked)
+.*
+!.gitignore
+
 # build output (frontend)
 frontend/dist/
 dist/                       # legacy tracked build noise; remove when clean
