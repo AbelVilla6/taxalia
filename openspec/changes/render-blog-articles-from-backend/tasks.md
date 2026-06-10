@@ -37,11 +37,11 @@ Chain strategy: feature-branch-chain
 
 ## Phase 3: Frontend SSR rendering
 
-- [ ] 3.1 Update `frontend/src/lib/blog.ts`, `frontend/src/components/Blog.astro`, and blog listing pages to consume backend summaries.
-- [ ] 3.2 Update `frontend/src/pages/blog/[slug].astro`, `frontend/src/pages/es/blog/[slug].astro`, and `frontend/src/layouts/Base.astro` for SEO head overrides and backend article payloads.
-- [ ] 3.3 Add `frontend/src/components/BlogTableOfContents.astro`, style it in `frontend/src/assets/css/blog-post.css`, and remove stale static blog arrays from `frontend/src/i18n.ts`.
+- [x] 3.1 Update `frontend/src/lib/blog.ts`, `frontend/src/components/Blog.astro`, and blog listing pages to consume backend summaries.
+- [x] 3.2 Update `frontend/src/pages/blog/[slug].astro`, `frontend/src/pages/es/blog/[slug].astro`, and `frontend/src/layouts/Base.astro` for SEO head overrides and backend article payloads.
+- [x] 3.3 Add `frontend/src/components/BlogTableOfContents.astro`, style it in `frontend/src/assets/css/blog-post.css`, and remove stale static blog arrays from `frontend/src/i18n.ts`.
 
 ## Phase 4: Verification
 
 - [x] 4.1 Run `npm --prefix backend test` and `npm --prefix backend run typecheck` after backend slices.
-- [ ] 4.2 Run `npm run build` and smoke-check `/blog`, `/es/blog`, `/blog/[slug]`, and `/es/blog/[slug]` for SSR-only rendering and correct canonical/hreflang tags.
+- [x] 4.2 Run `npm run build` and smoke-check `/blog`, `/es/blog`, `/blog/[slug]`, and `/es/blog/[slug]` for SSR-only rendering and correct canonical/hreflang tags.
